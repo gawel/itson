@@ -23,7 +23,7 @@ def dformat(d):
     if d == 0:
         d = 0
     elif d > 60:
-        d = '%sh%sm' % (d / 60, d % 60)
+        d = '%sh%sm' % (int(d / 60), d % 60)
     else:
         d = '%sm' % d
     return d
@@ -57,6 +57,7 @@ def index():
             started=started.strftime('%H:%M'),
             ended=ended,
             duration=duration,
+            comment=r.get('comment', ''),
         ))
     return template('index', total=dformat(t), itson=itson, title=title,
                     records=records, request=request)
@@ -83,6 +84,7 @@ def session():
                 {
                     'ended': now.strftime(FMT),
                     'duration': duration,
+                    'comment': request.forms['comment'] or '',
                 },
                 Session.ended == 0)
         else:

@@ -37,6 +37,9 @@ body {
         <div class="text-center">
             <input type="hidden" name="submited" value="1">
 % if itson:
+            <input name="comment" placeholder="Comment..."
+                   class="form-control" />
+            <div class="row">&nbsp;</div>
             <input type="submit" class="btn btn-lg btn-primary"
                    name="stop" value="Stop" />
 % else:

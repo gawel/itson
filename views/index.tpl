@@ -25,6 +25,9 @@ body {
     background-image: url('/static/images/itsoff.jpg')
 % end
 }
+div.back {
+    background-color: rgba(255, 255, 255, 0.5);
+}
 </style>
 </head>
 <body>
@@ -32,24 +35,30 @@ body {
 
 <div class="row">&nbsp;</div>
 
-<div class="row">
+<div class="row back">
     <table class="table">
         <tr>
+            <th>Date</th>
             <th>Started</th>
             <th>Ended</th>
             <th>Duration</th>
+            <th>Comment</th>
         </tr>
         % for r in records:
             <tr>
+                <td>{{r['date']}}</td>
                 <td>{{r['started']}}</td>
                 <td>{{r['ended'] or "Its ON!"}}</td>
                 <td>{{r['duration'] or "Its ON!"}}</td>
+                <td>{{r['comment'] or ""}}</td>
             </tr>
         % end
         <tr>
             <th>Total</th>
             <th>&nbsp;</th>
+            <th>&nbsp;</th>
             <th>{{total}}</th>
+            <th>&nbsp;</th>
         </tr>
     </table>
 </div>
