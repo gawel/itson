@@ -27,6 +27,9 @@ body {
     <li class="nav-item">
       <a class="nav-link" href="/history">History</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/session">New Sess</a>
+    </li>
   </ul>
 </nav>
 <div class="container">

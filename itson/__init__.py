@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-from tinydb import TinyDB, Query
+from tinydb import (TinyDB, Query)
 from bottle import (
-    route, run, template, request, default_app, redirect,
+    route, default_app, template, request,
+    run, debug,
+    redirect,
     auth_basic, static_file,
 )
 
@@ -65,9 +67,8 @@ def get_sessions(records):
     return sess
 
 
-@route("/statics/<filepath:re:.*\.jpg>")
-@route("/statics/<filepath:re:.*\.css>")
-def images(filepath):
+@route("/statics/<filepath:re:.*\.(jpg|css)>")
+def statics(filepath):
     return static_file(filepath, root="statics")
 
 
@@ -84,7 +85,6 @@ def index():
             itson=True,
             sessions=sessions,
         )
-    print(context)
     return template('index', **context)
 
 
@@ -157,7 +157,14 @@ def session():
     return template('session', **context)
 
 
+@route('/<path:path>')
+def error_404(path):
+    return redirect('/')
+
+
 def main():
+    if 'ADMIN_PASSWORD' not in os.environ:
+        debug(mode=True)
     run(host='0.0.0.0', port=4444, reloader=True)
 
 
