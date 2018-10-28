@@ -15,7 +15,8 @@ SIZES = {k: '%sm' % k for k in [i / 10 for i in list(range(5, 45, 5))]}
 
 
 def check_auth(user, pw):
-    if pw == os.environ.get('ADMIN_PASSWORD', 'itson'):
+    auth = ('admimin', os.environ.get('ADMIN_PASSWORD', 'passwd'))
+    if (user, pw) == auth:
         return True
     return False
 
