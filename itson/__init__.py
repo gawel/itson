@@ -11,6 +11,7 @@ db = TinyDB(os.path.expanduser('~/.itson.json'))
 
 Session = Query()
 FMT = '%Y-%m-%dT%H:%M'
+SIZES = {k: '%sm' % k for k in [i / 10 for i in list(range(5, 45, 5))]}
 
 
 def check_auth(user, pw):
@@ -57,6 +58,7 @@ def index():
             started=started.strftime('%H:%M'),
             ended=ended,
             duration=duration,
+            size=SIZES[float(r.get('size', '0.5'))],
             comment=r.get('comment', ''),
         ))
     return template('index', total=dformat(t), itson=itson, title=title,
@@ -84,6 +86,7 @@ def session():
                 {
                     'ended': now.strftime(FMT),
                     'duration': duration,
+                    'size': request.forms['size'],
                     'comment': request.forms['comment'] or '',
                 },
                 Session.ended == 0)
@@ -94,7 +97,12 @@ def session():
                 duration=0,
             ))
         return redirect('/')
-    return template('session', title=title, itson=itson, request=request)
+    context = dict(
+        title=title, itson=itson,
+        sizes=sorted(SIZES.items()),
+        request=request,
+    )
+    return template('session', **context)
 
 
 def main():
