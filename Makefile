@@ -9,9 +9,6 @@ venv:
 serve: venv
 	./venv/bin/$(APP)
 
-sync:
-	scp amandine:~/.$(APP).json ~/.$(APP).json
-
 upgrade:
 ifeq ($(HOSTNAME), $(HOST))
 	git pull origin master
@@ -19,5 +16,8 @@ ifeq ($(HOSTNAME), $(HOST))
 else
 	git push origin master
 	ssh $(HOST) "cd ~/apps/$(APP) && make upgrade"
+
+sync:
+	scp $(HOST):~/.$(APP).json ~/.$(APP).json
 endif
 
