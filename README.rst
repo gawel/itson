@@ -24,3 +24,5 @@ Use whatever wsgi server for production. `itson.application` is a wsgi app::
 
 $ ADMIN_PASSWORD=yourpassword ./venv/bin/chaussette itson.application --port 8080
 
+itson use `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ The database is
+located at `~/.itson.json`
