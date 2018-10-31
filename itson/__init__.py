@@ -99,48 +99,75 @@ def history():
                     sessions=get_sessions(db.all()))
 
 
-@route('/session')
-@route('/session', method='POST')
-@auth_basic(check_auth)
-def session():
+def _session(**kwargs):
     now = datetime.now()
-    title = 'Ready to go?'
     itson = False
     latest = None
     for latest in latests():
         if not latest['ended']:
-            title = 'Back ?'
             itson = True
             break
         else:
             latest = None
+    data = {
+        'itson': itson,
+        'latest': latest,
+    }
+    if latest:
+        started = datetime.strptime(latest['started'], FMT)
+        duration = now - started
+        duration = int(duration.seconds / 60)
+        records = db.search(
+            (Session.started == latest['started']) & (Session.ended == 0))
+        record = {}
+        for record in records:
+            record = record
+        record.update({
+                'ended': now.strftime(FMT),
+                'duration': duration,
+                'size': kwargs['size'],
+                'comment': kwargs.get('comment') or '',
+        })
+        data.update(record)
+        db.update(
+            record,
+            (Session.started == latest['started']) & (Session.ended == 0))
+    else:
+        spot = kwargs.get('new_spot') or None
+        if spot is None:
+            spot = kwargs.get('spot') or 'Secret'
+        record = dict(
+            date=now.strftime('%Y-%m-%d'),
+            started=now.strftime(FMT),
+            ended=0,
+            duration=0,
+            spot=spot,
+        )
+        data.update(record)
+        db.insert(record)
+    return data
 
+
+@route('/session')
+@route('/session', method='POST')
+@auth_basic(check_auth)
+def session():
+    data = {
+        'itson': False,
+        'latest': None,
+        'title': 'Ready to go?',
+    }
     if request.forms:
-        if latest:
-            started = datetime.strptime(latest['started'], FMT)
-            duration = now - started
-            duration = int(duration.seconds / 60)
-            db.update(
-                {
-                    'ended': now.strftime(FMT),
-                    'duration': duration,
-                    'size': request.forms['size'],
-                    'comment': request.forms['comment'] or '',
-                },
-                (Session.started == latest['started']) & (Session.ended == 0))
-            return redirect('/')
-        else:
-            spot = request.forms.get('new_spot') or None
-            if spot is None:
-                spot = request.forms.get('spot') or 'Secret'
-            db.insert(dict(
-                date=now.strftime('%Y-%m-%d'),
-                started=now.strftime(FMT),
-                ended=0,
-                duration=0,
-                spot=spot,
-            ))
-            return redirect('/session')
+        data.update(_session(**request.forms))
+        redirect('/')
+
+    else:
+        for latest in latests():
+            if not latest['ended']:
+                data.update(title='Back ?', itson=True)
+                break
+            else:
+                latest = data['latest'] = None
 
     spots = []
     for r in db.all():
@@ -149,12 +176,21 @@ def session():
             spots.insert(0, spot)
     spots.insert(1, 'Secret')
 
-    context = dict(
-        title=title, itson=itson,
+    data.update(
         sizes=sorted(SIZES.items()),
         spots=spots,
     )
-    return template('session', **context)
+    return template('session', **data)
+
+
+@route('/api/sessions', method='POST')
+@auth_basic(check_auth)
+def api_session():
+    data = _session(**request.json)
+    latest = data.pop('latest', None)
+    if latest:
+        print(latest)
+    return {k: v for k, v in data.items() if v}
 
 
 @route('/<path:path>')
