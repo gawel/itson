@@ -17,12 +17,13 @@
             <tr>
               <td><a href="/sessions/{{ r['date'].replace('-', '/') }}"
                      >{{r['date']}}</a></td>
-                <td>{{r['spot']}}</td>
-                <td class="no-mobile">{{r['started']}}</td>
-                <td class="no-mobile">{{r['ended'] or "Its ON!"}}</td>
-                <td>{{r['duration'] or "Its ON!"}}</td>
-                <td>{{r['size']}}</td>
-                <td class="no-mobile">{{r['comment'] or ""}}</td>
+              <td><a target="_new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a></td>
+              <td>{{r['spot']}}</td>
+              <td class="no-mobile">{{r['started']}}</td>
+              <td class="no-mobile">{{r['ended'] or "Its ON!"}}</td>
+              <td>{{r['duration'] or "Its ON!"}}</td>
+              <td>{{r['size']}}</td>
+              <td class="no-mobile">{{r['comment'] or ""}}</td>
             </tr>
         % end
         </tbody>

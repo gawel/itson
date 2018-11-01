@@ -6,11 +6,11 @@
     % for r in sessions:
         <div>
         % if r['ended']:
-            I surfed {{ r['duration'] }}
-            <a href="#" >@{{ r['spot'] }}</a>.
+            I surfed {{ r['size'] }} waves during {{ r['duration'] }}
+            <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>.
         % else:
             I'm surfing
-            <a href="#" >@{{ r['spot'] }}</a>
+            <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>
             since {{ r['duration'] }}.
         % end
         </div>

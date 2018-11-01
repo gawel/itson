@@ -41,7 +41,7 @@ body {
   <a class="navbar-brand mb-0 h1" href="/">{{ title }}</a>
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" href="/history">History</a>
+      <a class="nav-link" href="/sessions/">History</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/sessions/new">New Sess</a>
