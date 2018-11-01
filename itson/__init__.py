@@ -88,19 +88,20 @@ def index():
 @route('/sessions/<year:int>/<month:int>/<day:int>')
 @route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>')
 def session(year=None, month=None, day=None, share_id=None):
-    if year:
-        date = '%04d-%02d-%02d' % (year, month, day)
-    else:
-        date = datetime.now().strftime(FMT).split('T')[0]
+    now = datetime.now().strftime(FMT).split('T')[0]
+    today = True
+    date = '%04d-%02d-%02d' % (year, month, day)
+    if date != now:
+        today = False
     context = dict(
         itson=False,
-        title="It's OFF...",
+        title="It's OFF..." if today else "It was OFF...",
     )
     records = db.search(Session.date == date)
     sessions = get_sessions(records)
     if sessions:
         context.update(
-            title="It's ON!",
+            title="It's ON!" if today else "It was OO!",
             itson=True,
             sessions=sessions,
         )
