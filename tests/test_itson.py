@@ -38,7 +38,7 @@ def test_app(app):
     resp = form.submit().follow()
     resp.mustcontain("I surfed")
 
-    resp = app.get('/history')
+    resp = app.get('/sessions/')
     resp.mustcontain('My Spot')
 
 
