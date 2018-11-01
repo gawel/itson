@@ -9,7 +9,7 @@ venv:
 serve: venv
 	./venv/bin/$(APP)
 
-upgrade:
+upgrade: venv
 ifeq ($(HOSTNAME), $(HOST))
 	git pull origin master
 	~/apps/bin/circusctl restart $(APP)
