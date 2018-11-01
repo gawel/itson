@@ -75,7 +75,7 @@ def get_sessions(records):
     return sess
 
 
-@route("/statics/<filepath:re:.*\.(jpg|css)>")
+@route("/statics/<filepath:re:.*\.(jpg|css|ico)>")
 def statics(filepath):
     return static_file(filepath, root="statics")
 

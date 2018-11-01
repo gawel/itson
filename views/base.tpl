@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 <link rel="stylesheet" href="/statics/css/main.css">
+<link rel="shortcut icon" href="/statics/images/itson.ico"
+      type="image/x-icon" sizes="16x16 24x24 32x32 64x64">
 
 <title>{{ title }}</title>
 
