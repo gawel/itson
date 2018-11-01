@@ -18,7 +18,7 @@
 
 <meta name="twitter:title" content="Is it ON?" />
 <meta name="twitter:description" content=""/>
-<meta name="twitter:card"content="summary_large_image" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content="{{ url }}/statics/images/itson.jpg"/>
 
 <style>
