@@ -16,6 +16,13 @@ FMT = '%Y-%m-%dT%H:%M'
 SIZES = {k: '%sm' % k for k in [i / 10 for i in list(range(5, 45, 5))]}
 
 
+def url(path=None):
+    root_url = '/'.join(request.url.split('/')[:3])
+    if path:
+        root_url += path
+    return root_url
+
+
 def check_auth(user, pw):
     auth = ('admimin', os.environ.get('ADMIN_PASSWORD', 'passwd'))
     if (user, pw) == auth:
@@ -85,7 +92,7 @@ def index():
             itson=True,
             sessions=sessions,
         )
-    return template('index', **context)
+    return template('index', url=url(), **context)
 
 
 @route('/history')
@@ -95,7 +102,7 @@ def history():
     for latest in latests():
         title = "It's ON!"
         itson = True
-    return template('history', itson=itson, title=title,
+    return template('history', itson=itson, title=title, url=url(),
                     sessions=get_sessions(db.all()))
 
 
@@ -179,6 +186,7 @@ def session():
     data.update(
         sizes=sorted(SIZES.items()),
         spots=spots,
+        url=url(),
     )
     return template('session', **data)
 
