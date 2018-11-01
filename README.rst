@@ -10,7 +10,7 @@ $ cd itson
 
 Create a venv and install the soft::
 
-$ make
+$ PYTHON=python3 make
 
 Start the app for testing::
 
