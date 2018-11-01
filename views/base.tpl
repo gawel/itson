@@ -14,13 +14,17 @@
 <meta name="og:type" content="article" />
 <meta name="og:title" content="Is it ON?" />
 <meta name="og:description" content=""/>
-<meta name="og:url" content="{{ url }}"/>
+<meta name="og:url" content="{{ request.url }}"/>
+% if itson:
 <meta name="og:image" content="{{ url }}/statics/images/itson.jpg"/>
+% else:
+<meta name="og:image" content="{{ url }}/statics/images/itsoff.jpg"/>
+% end
 
 <meta name="twitter:title" content="Is it ON?" />
 <meta name="twitter:description" content=""/>
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="{{ url }}"/>
+<meta name="twitter:url" content="{{ request.url }}"/>
 
 <style>
 body {
@@ -40,7 +44,7 @@ body {
       <a class="nav-link" href="/history">History</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/session">New Sess</a>
+      <a class="nav-link" href="/sessions/new">New Sess</a>
     </li>
   </ul>
 </nav>

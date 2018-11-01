@@ -81,18 +81,30 @@ def statics(filepath):
 
 @route('/')
 def index():
+    date = datetime.now().strftime(FMT)
+    return redirect('/sessions/' + date.split('T')[0].replace('-', '/'))
+
+
+@route('/sessions/<year:int>/<month:int>/<day:int>')
+@route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>')
+def session(year=None, month=None, day=None, share_id=None):
+    if year:
+        date = '%04d-%02d-%02d' % (year, month, day)
+    else:
+        date = datetime.now().strftime(FMT).split('T')[0]
     context = dict(
         itson=False,
         title="It's OFF...",
     )
-    sessions = get_sessions(latests())
+    records = db.search(Session.date == date)
+    sessions = get_sessions(records)
     if sessions:
         context.update(
             title="It's ON!",
             itson=True,
             sessions=sessions,
         )
-    return template('index', url=url(), **context)
+    return template('index', url=url(), request=request, **context)
 
 
 @route('/history')
@@ -102,7 +114,8 @@ def history():
     for latest in latests():
         title = "It's ON!"
         itson = True
-    return template('history', itson=itson, title=title, url=url(),
+    return template('history', itson=itson, title=title,
+                    url=url(), request=request,
                     sessions=get_sessions(db.all()))
 
 
@@ -120,13 +133,13 @@ def _session(**kwargs):
         'itson': itson,
         'latest': latest,
     }
+    record = {}
     if latest:
         started = datetime.strptime(latest['started'], FMT)
         duration = now - started
         duration = int(duration.seconds / 60)
         records = db.search(
             (Session.started == latest['started']) & (Session.ended == 0))
-        record = {}
         for record in records:
             record = record
         record.update({
@@ -135,7 +148,6 @@ def _session(**kwargs):
                 'size': kwargs['size'],
                 'comment': kwargs.get('comment') or '',
         })
-        data.update(record)
         db.update(
             record,
             (Session.started == latest['started']) & (Session.ended == 0))
@@ -150,15 +162,15 @@ def _session(**kwargs):
             duration=0,
             spot=spot,
         )
-        data.update(record)
         db.insert(record)
+    data.update(record)
     return data
 
 
-@route('/session')
-@route('/session', method='POST')
+@route('/sessions/new')
+@route('/sessions/new', method='POST')
 @auth_basic(check_auth)
-def session():
+def new_session():
     data = {
         'itson': False,
         'latest': None,
@@ -166,8 +178,8 @@ def session():
     }
     if request.forms:
         data.update(_session(**request.forms))
-        redirect('/')
-
+        return redirect(
+            '/sessions/' + data['date'].split('T')[0].replace('-', '/'))
     else:
         for latest in latests():
             if not latest['ended']:
@@ -187,6 +199,7 @@ def session():
         sizes=sorted(SIZES.items()),
         spots=spots,
         url=url(),
+        request=request,
     )
     return template('session', **data)
 
