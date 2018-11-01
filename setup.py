@@ -30,6 +30,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'tinydb',
+        'requests',
         'bottle',
         'gevent',
         'chaussette',
@@ -42,5 +43,6 @@ setup(
     entry_points="""
     [console_scripts]
     itson = itson:main
+    itson-cron = itson.cron:main
     """,
 )

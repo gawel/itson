@@ -86,7 +86,9 @@ def index():
 
 
 @route('/sessions/<year:int>/<month:int>/<day:int>')
+@route('/sessions/<year:int>/<month:int>/<day:int>/')
 @route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>')
+@route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>/')
 def session(year=None, month=None, day=None, share_id=None):
     now = datetime.now().strftime(FMT).split('T')[0]
     today = True
@@ -108,7 +110,8 @@ def session(year=None, month=None, day=None, share_id=None):
     return template('index', url=url(), request=request, **context)
 
 
-@route('/history')
+@route('/sessions')
+@route('/sessions/')
 def history():
     itson = False
     title = "It's OFF..."
