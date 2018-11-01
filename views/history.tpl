@@ -15,7 +15,7 @@
         <tbody>
         % for r in sessions:
             <tr>
-              <td><a href="/sessions/{{ r['date'].replace('-', '/') }}/"
+              <td><a href="/sessions/{{ r['date'].replace('-', '/') }}"
                      >{{r['date']}}</a></td>
                 <td>{{r['spot']}}</td>
                 <td class="no-mobile">{{r['started']}}</td>
