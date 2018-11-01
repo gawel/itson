@@ -14,12 +14,13 @@
 <meta name="og:type" content="article" />
 <meta name="og:title" content="Is it ON?" />
 <meta name="og:description" content=""/>
-<meta name="og:url" content="{{ url }}/statics/images/itson.jpg"/>
+<meta name="og:url" content="{{ url }}"/>
+<meta name="og:image" content="{{ url }}/statics/images/itson.jpg"/>
 
 <meta name="twitter:title" content="Is it ON?" />
 <meta name="twitter:description" content=""/>
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content="{{ url }}/statics/images/itson.jpg"/>
+<meta name="twitter:url" content="{{ url }}"/>
 
 <style>
 body {
