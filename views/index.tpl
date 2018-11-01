@@ -2,7 +2,7 @@
 <div class="row">&nbsp;</div>
 <div class="back index text-center">
 %if itson:
-    <div class="alert alert-success">It's ON!</div>
+    <div class="alert alert-success">{{ title }}</div>
     % for r in sessions:
         <div>
         % if r['ended']:

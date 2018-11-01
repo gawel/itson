@@ -101,7 +101,7 @@ def session(year=None, month=None, day=None, share_id=None):
     sessions = get_sessions(records)
     if sessions:
         context.update(
-            title="It's ON!" if today else "It was OO!",
+            title="It's ON!" if today else "It was ON!",
             itson=True,
             sessions=sessions,
         )
