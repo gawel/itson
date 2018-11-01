@@ -59,9 +59,7 @@ def get_sessions(records):
             duration = now - started
             duration = int(duration.seconds / 60)
         duration = dformat(duration)
-        size = r.get('size') or ''
-        if size:
-            size = SIZES[float(size)]
+        size = r.get('size') or 0
         sess.insert(0, dict(
             date=started.strftime('%Y-%m-%d'),
             started=started.strftime('%H:%M'),
@@ -71,6 +69,7 @@ def get_sessions(records):
             size=size,
             comment=r.get('comment', ''),
             report_url=r.get('report_url', '#'),
+            record=r,
         ))
     return sess
 
@@ -119,9 +118,18 @@ def history():
     for latest in latests():
         title = "It's ON!"
         itson = True
+    sessions = get_sessions(db.all())
+    amount = len(sessions)
+    total = dict(
+        date=amount,
+        spot=len(set(s['spot'] for s in sessions)),
+        duration=dformat(sum(s['record']['duration'] for s in sessions)),
+        size=sum(
+            float(s['record'].get('size') or 0) for s in sessions
+        ) / amount)
     return template('history', itson=itson, title=title,
                     url=url(), request=request,
-                    sessions=get_sessions(db.all()))
+                    sessions=sessions, total=total)
 
 
 def _session(**kwargs):

@@ -7,17 +7,31 @@ body {
     -o-background-size: cover;
     background-size: cover;
 }
+.table {
+    margin-bottom:0;
+}
+.table thead th {
+    padding-top:0;
+}
+.table tfoot th {
+    padding-bottom:0;
+}
 div.back {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.5);
     padding: 1em 1em;
     border-radius: 15px;
 }
-div.index div.alert {
+div.index div.alert,
+div.index div.off {
     font-size: 200%;
 }
 div.index {
     width: 50%;
     margin: auto;
+    margin-top: 5%;
+}
+div.index div.alert-success {
+    background-color: rgba(204, 255, 204, 0.3);
 }
 
 @media (max-width: 640px) {
@@ -26,6 +40,7 @@ div.index {
     }
     div.index {
         width: 99%;
+        margin-top: 0%;
     }
     .no-mobile {
         visibility: hidden;

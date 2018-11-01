@@ -1,5 +1,4 @@
 % rebase('base.tpl', title=title, itson=itson)
-<div class="row">&nbsp;</div>
 <div class="back index text-center">
 %if itson:
     <div class="alert alert-success">{{ title }}</div>
@@ -17,6 +16,6 @@
     %end
     </div>
 %else:
-    <div class="alert alert-light">No surf today...</div>
+    <div class="off">{{ title }}</div>
 %end
 </div>
