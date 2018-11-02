@@ -6,10 +6,18 @@
         <div>
         % if r['ended']:
             I surfed {{ r['size'] }} waves during {{ r['duration'] }}
-            <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>.
+            % if r['report_url']:
+              <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>
+            % else:
+              @{{ r['spot'] }}
+            % end
         % else:
             I'm surfing
-            <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>
+            % if r['report_url']:
+              <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>
+            % else:
+              @{{ r['spot'] }}
+            % end
             since {{ r['duration'] }}.
         % end
         </div>

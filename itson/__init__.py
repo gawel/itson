@@ -68,7 +68,7 @@ def get_sessions(records):
             spot=r.get('spot') or 'Secret',
             size=size,
             comment=r.get('comment', ''),
-            report_url=r.get('report_url', '#'),
+            report_url=r.get('report_url', ''),
             record=r,
         ))
     return sess
