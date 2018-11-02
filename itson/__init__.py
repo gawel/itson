@@ -125,7 +125,7 @@ def history():
         spot=len(set(s['spot'] for s in sessions)),
         duration=dformat(sum(s['record']['duration'] for s in sessions)),
         size=sum(
-            float(s['record'].get('size') or 0) for s in sessions
+            '%.2f' % float(s['record'].get('size') or 0) for s in sessions
         ) / amount)
     return template('history', itson=itson, title=title,
                     url=url(), request=request,
