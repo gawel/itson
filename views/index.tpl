@@ -5,7 +5,7 @@
     % for r in sessions:
         <div>
         % if r['ended']:
-            I surfed {{ r['size'] }} waves during {{ r['duration'] }}
+            I surfed {{ r['size'] }}m waves during {{ r['duration'] }}
             % if r['report_url']:
               <a target="new" href="{{ r['report_url'] }}">@{{ r['spot'] }}</a>
             % else:
