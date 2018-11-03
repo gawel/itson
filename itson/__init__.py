@@ -119,6 +119,8 @@ def session(year=None, month=None, day=None, share_id=None):
 
 @route('/sessions')
 @route('/sessions/')
+@route('/admin/sessions')
+@route('/admin/sessions/')
 def history():
     itson = False
     title = "It's OFF..."
@@ -136,7 +138,24 @@ def history():
         ) / amount))
     return template('history', itson=itson, title=title,
                     url=url(), request=request,
+                    admin='/admin/' in request.url,
                     sessions=sessions, total=total)
+
+
+@route('/admin/sessions/<doc_id:int>')
+@route('/admin/sessions/<doc_id:int>/')
+@route('/admin/sessions/<doc_id:int>', method='POST')
+def edit_session(doc_id=None):
+    record = db.get(doc_id=doc_id)
+    record = Record(record, id=record.doc_id)
+    if request.forms:
+        db.update(request.forms, doc_ids=[doc_id])
+        return redirect(request.url)
+    return template('edit', itson=True, title='Edit',
+                    url=url(), request=request,
+                    admin='/admin/' in request.url,
+                    record=record,
+                    )
 
 
 def _session(**kwargs):
@@ -187,8 +206,8 @@ def _session(**kwargs):
     return data
 
 
-@route('/sessions/new')
-@route('/sessions/new', method='POST')
+@route('/admin/sessions/new')
+@route('/admin/sessions/new', method='POST')
 @auth_basic(check_auth)
 def new_session():
     data = {

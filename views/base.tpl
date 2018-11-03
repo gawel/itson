@@ -43,11 +43,17 @@ body {
 <nav class="navbar navbar-light bg-light">
   <a class="navbar-brand mb-0 h1" href="/">{{ title }}</a>
   <ul class="nav">
+    % if '/admin/' in request.url:
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/sessions/">History</a>
+      </li>
+    % else:
+      <li class="nav-item">
+        <a class="nav-link" href="/sessions/">History</a>
+      </li>
+    % end
     <li class="nav-item">
-      <a class="nav-link" href="/sessions/">History</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/sessions/new">New Sess</a>
+      <a class="nav-link" href="/admin/sessions/new">New Sess</a>
     </li>
   </ul>
 </nav>

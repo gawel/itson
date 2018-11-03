@@ -1,7 +1,7 @@
 % rebase('base.tpl', title=title, itson=itson)
 <div class="row">&nbsp;</div>
 <div class="back">
-<form action="/sessions/new" method="POST">
+<form action="/admin/sessions/new" method="POST">
     <h2>{{ title }}</h2>
     <div class="text-center">
 % if itson:

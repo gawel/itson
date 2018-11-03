@@ -19,20 +19,20 @@ def app(db):
 
 def test_app(app):
     resp = app.get('/').follow()
-    resp.mustcontain("No surf today...")
+    resp.mustcontain("OFF...")
 
-    resp = app.get('/sessions/new', status='*')
+    resp = app.get('/admin/sessions/new', status='*')
     assert resp.status_code == 401
 
     app.authorization = ('Basic', ('admimin', 'passwd'))
-    resp = app.get('/sessions/new')
+    resp = app.get('/admin/sessions/new')
 
     form = resp.form
     form['new_spot'] = 'My Spot'
     resp = form.submit().follow()
     resp.mustcontain("I'm surfing")
 
-    resp = app.get('/sessions/new')
+    resp = resp.click('New Sess')
     form = resp.form
     form['size'] = '2.0'
     resp = form.submit().follow()

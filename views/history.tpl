@@ -15,8 +15,15 @@
         <tbody>
         % for r in sessions:
             <tr id="{{ r.id }}">
-              <td><a href="/sessions/{{ r.date.replace('-', '/') }}"
-                     >{{r.date}}</a></td>
+              <td>
+                 % if admin:
+                 <a href="/admin/sessions/{{ r.id }}"
+                     >{{r.date}}</a>
+                 % else:
+                  <a href="/sessions/{{ r.date.replace('-', '/') }}"
+                     >{{r.date}}</a>
+                 % end
+              </td>
               <td>
                   % if r.report_url:
                     <a target="new" href="{{ r.report_url }}">@{{ r.spot }}</a>
