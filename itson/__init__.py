@@ -145,6 +145,7 @@ def history():
 @route('/admin/sessions/<doc_id:int>')
 @route('/admin/sessions/<doc_id:int>/')
 @route('/admin/sessions/<doc_id:int>', method='POST')
+@auth_basic(check_auth)
 def edit_session(doc_id=None):
     record = db.get(doc_id=doc_id)
     record = Record(record, id=record.doc_id)
