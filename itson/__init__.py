@@ -16,6 +16,12 @@ FMT = '%Y-%m-%dT%H:%M'
 SIZES = {k: '%sm' % k for k in [i / 10 for i in list(range(5, 45, 5))]}
 
 
+class Record(dict):
+
+    def __getattr__(self, attr):
+        return self[attr]
+
+
 def url(path=None):
     root_url = '/'.join(request.url.split('/')[:3])
     if path:
@@ -60,7 +66,8 @@ def get_sessions(records):
             duration = int(duration.seconds / 60)
         duration = dformat(duration)
         size = r.get('size') or 0
-        sess.insert(0, dict(
+        sess.insert(0, Record(
+            id=r.doc_id,
             date=started.strftime('%Y-%m-%d'),
             started=started.strftime('%H:%M'),
             ended=ended,
@@ -120,7 +127,7 @@ def history():
         itson = True
     sessions = get_sessions(db.all())
     amount = len(sessions)
-    total = dict(
+    total = Record(
         date=amount,
         spot=len(set(s['spot'] for s in sessions)),
         duration=dformat(sum(s['record']['duration'] for s in sessions)),
