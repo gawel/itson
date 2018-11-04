@@ -150,7 +150,19 @@ def edit_session(doc_id=None):
     record = db.get(doc_id=doc_id)
     record = Record(record, id=record.doc_id)
     if request.forms:
-        db.update(request.forms, doc_ids=[doc_id])
+        data = {k: v for k, v in request.forms.items() if v}
+        ended = data.get('ended') or 0
+        data['ended'] = ended
+        try:
+            ended = datetime.strptime(data['ended'], FMT)
+        except (ValueError, TypeError):
+            pass
+        else:
+            started = datetime.strptime(data['started'], FMT)
+            duration = ended - started
+            duration = int(duration.seconds / 60)
+            data['duration'] = duration
+        db.update(data, doc_ids=[doc_id])
         return redirect(request.url)
     return template('edit', itson=True, title='Edit',
                     url=url(), request=request,

@@ -9,7 +9,7 @@
         <input type="text" name="{{ field }}"
                placeholder="{{ field.title() }}..."
                class="form-control"
-               value="{{ record[field] }}"
+               value="{{ record.get(field) or '' }}"
                 />
       </div>
     % end
