@@ -81,7 +81,7 @@ def get_sessions(records):
     return sess
 
 
-@route("/statics/<filepath:re:.*\.(jpg|css|ico)>")
+@route(r"/statics/<filepath:re:.*\.(jpg|css|ico)>")
 def statics(filepath):
     return static_file(filepath, root="statics")
 
@@ -244,7 +244,7 @@ def new_session():
     for r in db.all():
         spot = r.get('spot')
         if spot not in (None, 'Secret') and spot not in spots:
-            spots.insert(0, spot)
+            spots.append(spot)
     spots.insert(1, 'Secret')
 
     data.update(
