@@ -12,7 +12,7 @@
               @{{ r['spot'] }}
             % end
             % if r['comment']:
-              <div>{{ r['comment'] }}</div>
+              <div>It was {{ r['comment'] }}</div>
             % end
         % else:
             I'm surfing
