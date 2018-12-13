@@ -11,6 +11,9 @@
             % else:
               @{{ r['spot'] }}
             % end
+            % if r['comment']:
+              <div>{{ r['comment'] }}</div>
+            % end
         % else:
             I'm surfing
             % if r['report_url']:
