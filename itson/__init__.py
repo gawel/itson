@@ -2,6 +2,7 @@
 import os
 from datetime import datetime
 from tinydb import (TinyDB, Query)
+from operator import itemgetter
 from bottle import (
     route, default_app, template, request,
     run, debug,
@@ -68,6 +69,7 @@ def get_sessions(records):
         size = r.get('size') or 0
         sess.insert(0, Record(
             id=r.doc_id,
+            sort_key=started,
             date=started.strftime('%Y-%m-%d'),
             started=started.strftime('%H:%M'),
             ended=ended,
@@ -78,6 +80,7 @@ def get_sessions(records):
             report_url=r.get('report_url', ''),
             record=r,
         ))
+    sess = sorted(sess, key=itemgetter('sort_key'), reverse=True)
     return sess
 
 
