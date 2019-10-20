@@ -244,11 +244,10 @@ def new_session():
                 latest = data['latest'] = None
 
     spots = []
-    for r in db.all():
+    for r in reversed(db.all()):
         spot = r.get('spot')
         if spot not in (None, 'Secret') and spot not in spots:
             spots.append(spot)
-    spots = list(reversed(spots))
     spots.insert(1, 'Secret')
 
     data.update(
