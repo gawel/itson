@@ -248,7 +248,7 @@ def new_session():
         spot = r.get('spot')
         if spot not in (None, 'Secret') and spot not in spots:
             spots.append(spot)
-    spots = reversed(spots)
+    spots = list(reversed(spots))
     spots.insert(1, 'Secret')
 
     data.update(
