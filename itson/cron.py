@@ -18,7 +18,7 @@ def main():
     reports = []
     for spot, path in known_spots.items():
         time.sleep(.3)
-        resp = requests.get(report_url(path))
+        resp = requests.get(report_url(path), verify=False)
         rpath = path.split('-archives-')[0]
         for line in resp.text.split():
             if "href" in line and rpath in line:
