@@ -4,12 +4,18 @@ from datetime import datetime
 from tinydb import (TinyDB, Query)
 from operator import itemgetter
 from bottle import (
-    route, default_app, template, request,
+    Bottle,
+    template, request,
     run, debug,
     redirect,
     auth_basic, static_file,
 )
 
+ROOT = os.path.dirname(os.path.dirname(__file__))
+TEMPLATE_PATH = [os.path.join(ROOT, 'views')]
+STATICS_PATH = os.path.join(ROOT, 'statics')
+
+app = Bottle()
 db = TinyDB(os.path.expanduser('~/.itson.json'))
 
 Session = Query()
@@ -84,21 +90,21 @@ def get_sessions(records):
     return sess
 
 
-@route(r"/statics/<filepath:re:.*\.(jpg|css|ico)>")
+@app.route(r"/statics/<filepath:re:.*\.(jpg|css|ico)>")
 def statics(filepath):
-    return static_file(filepath, root="statics")
+    return static_file(filepath, root=STATICS_PATH)
 
 
-@route('/')
+@app.route('/')
 def index():
     date = datetime.now().strftime(FMT)
     return redirect('/sessions/' + date.split('T')[0].replace('-', '/'))
 
 
-@route('/sessions/<year:int>/<month:int>/<day:int>')
-@route('/sessions/<year:int>/<month:int>/<day:int>/')
-@route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>')
-@route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>/')
+@app.route('/sessions/<year:int>/<month:int>/<day:int>')
+@app.route('/sessions/<year:int>/<month:int>/<day:int>/')
+@app.route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>')
+@app.route('/sessions/<year:int>/<month:int>/<day:int>/<share_id:int>/')
 def session(year=None, month=None, day=None, share_id=None):
     now = datetime.now().strftime(FMT).split('T')[0]
     today = True
@@ -117,13 +123,16 @@ def session(year=None, month=None, day=None, share_id=None):
             itson=True,
             sessions=sessions,
         )
-    return template('index', url=url(), request=request, **context)
+    return template(
+        'index', url=url(), request=request, **context,
+        template_lookup=TEMPLATE_PATH,
+    )
 
 
-@route('/sessions')
-@route('/sessions/')
-@route('/admin/sessions')
-@route('/admin/sessions/')
+@app.route('/sessions')
+@app.route('/sessions/')
+@app.route('/admin/sessions')
+@app.route('/admin/sessions/')
 def history():
     itson = False
     title = "It's OFF..."
@@ -142,12 +151,14 @@ def history():
     return template('history', itson=itson, title=title,
                     url=url(), request=request,
                     admin='/admin/' in request.url,
-                    sessions=sessions, total=total)
+                    sessions=sessions, total=total,
+                    template_lookup=TEMPLATE_PATH,
+                    )
 
 
-@route('/admin/sessions/<doc_id:int>')
-@route('/admin/sessions/<doc_id:int>/')
-@route('/admin/sessions/<doc_id:int>', method='POST')
+@app.route('/admin/sessions/<doc_id:int>')
+@app.route('/admin/sessions/<doc_id:int>/')
+@app.route('/admin/sessions/<doc_id:int>', method='POST')
 @auth_basic(check_auth)
 def edit_session(doc_id=None):
     record = db.get(doc_id=doc_id)
@@ -171,6 +182,7 @@ def edit_session(doc_id=None):
                     url=url(), request=request,
                     admin='/admin/' in request.url,
                     record=record,
+                    template_lookup=TEMPLATE_PATH,
                     )
 
 
@@ -222,8 +234,8 @@ def _session(**kwargs):
     return data
 
 
-@route('/admin/sessions/new')
-@route('/admin/sessions/new', method='POST')
+@app.route('/admin/sessions/new')
+@app.route('/admin/sessions/new', method='POST')
 @auth_basic(check_auth)
 def new_session():
     data = {
@@ -255,11 +267,12 @@ def new_session():
         spots=spots,
         url=url(),
         request=request,
+        template_lookup=TEMPLATE_PATH,
     )
     return template('session', **data)
 
 
-@route('/api/sessions', method='POST')
+@app.route('/api/sessions', method='POST')
 @auth_basic(check_auth)
 def api_session():
     data = _session(**request.json)
@@ -269,7 +282,7 @@ def api_session():
     return {k: v for k, v in data.items() if v}
 
 
-@route('/<path:path>')
+@app.route('/<path:path>')
 def error_404(path):
     return redirect('/')
 
@@ -277,7 +290,7 @@ def error_404(path):
 def main():
     if 'ADMIN_PASSWORD' not in os.environ:
         debug(mode=True)
-    run(host='0.0.0.0', port=4444, reloader=True)
+    run(app, host='0.0.0.0', port=4444, reloader=True)
 
 
-application = default_app()
+application = app

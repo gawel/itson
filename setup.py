@@ -32,8 +32,6 @@ setup(
         'tinydb',
         'requests',
         'bottle',
-        'gevent',
-        'chaussette',
     ],
     extras_require={
         'test': [
